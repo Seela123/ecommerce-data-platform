@@ -1,0 +1,12 @@
+[
+    {
+        "cart_id": 1,
+        "product_id": 162,
+        "title": "Blue Frock",
+        "price": 29.99,
+        "quantity": 4,
+        "total": 119.96,
+        "discount_percentage": 12.13,
+        "discounted_total": 105.41,
+        "thumbnail": "https://cdn.dummyjson.com/product-images/tops/blue-frock/thumbnail.webp",
+        "ingested_at": 
