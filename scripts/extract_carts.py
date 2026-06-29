@@ -3,7 +3,7 @@ import psycopg2
 import json
 from dotenv import load_dotenv
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 
 load_dotenv()
 
@@ -49,18 +49,19 @@ try:
 
     create_table_items = """ 
         CREATE TABLE IF NOT EXISTS raw.raw_cart_items (
-            cart_id INT NOT NULL,
-            product_id INT NOT NULL,
-            title TEXT,
-            price NUMERIC(12,2),
-            quantity INT,
-            total NUMERIC(12,2),
-            discount_percentage NUMERIC(5,2),
-            discounted_total NUMERIC(12,2),
-            thumbnail TEXT,
-            ingested_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (cart_id, product_id)
-        );
+    cart_id INT NOT NULL,
+    line_number INT NOT NULL,
+    product_id INT NOT NULL,
+    title TEXT,
+    price NUMERIC(12,2),
+    quantity INT,
+    total NUMERIC(12,2),
+    discount_percentage NUMERIC(5,2),
+    discounted_total NUMERIC(12,2),
+    thumbnail TEXT,
+    ingested_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (cart_id, line_number)
+);
     """
 
     cursor.execute(create_table_items)
@@ -180,10 +181,12 @@ try:
                 clean_table["ingested_at"]
             ))
 
-            # Must stay INSIDE the cart loop
             for line_number, product in enumerate(cart.get("products", []), start=1):
+                db_ingested_at = datetime.now()
+
                 clean_item = {
                     "cart_id": cart.get("id"),
+                    "line_number": line_number,
                     "product_id": product.get("id"),
                     "title": product.get("title"),
                     "price": product.get("price"),
@@ -192,14 +195,14 @@ try:
                     "discount_percentage": product.get("discountPercentage"),
                     "discounted_total": product.get("discountedTotal"),
                     "thumbnail": product.get("thumbnail"),
-                    "ingested_at": datetime.now()
+                    "ingested_at": db_ingested_at.isoformat()  # string for JSON
                 }
 
                 cursor.execute(
                     insert_item_query,
                     (
                         clean_item["cart_id"],
-                        line_number,
+                        clean_item["line_number"],
                         clean_item["product_id"],
                         clean_item["title"],
                         clean_item["price"],
@@ -208,12 +211,13 @@ try:
                         clean_item["discount_percentage"],
                         clean_item["discounted_total"],
                         clean_item["thumbnail"],
-                        clean_item["ingested_at"]
+                        db_ingested_at
                     )
                 )
+
                 all_cart_items.append(clean_item)
 
-        connection.commit()
+                connection.commit()
 
         skip += limit
 
