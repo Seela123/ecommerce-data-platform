@@ -1,8 +1,11 @@
+from datetime import datetime, timezone
 import os
-import psycopg2
 import json
 from dotenv import load_dotenv
 import requests
+from utils.db_connection import get_db_connect
+from utils.ingestion_logger import write_ingestion_log
+
 
 load_dotenv()
 
@@ -13,22 +16,11 @@ FILE_PATH = os.path.join(STORAGE_DIR, "products.json")
 os.makedirs(STORAGE_DIR, exist_ok=True)
 
 connection = None
-
-try:
-    connection = psycopg2.connect(
-        host=os.getenv("DB_HOST"),
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        port=os.getenv("DB_PORT")
-    )
-    print("Successfully connected to database")
-except Exception as e:
-    print(f"Connection error: {e}")
-    exit(1)
+started_at = datetime.now(timezone.utc)
 
 
 try:
+    connection = get_db_connect()
     cursor = connection.cursor()
 
     create_table = """
@@ -169,18 +161,37 @@ while True:
 
         if skip >= total:
             print("All products successfully processed!")
-            break
+
+
+
 
     except Exception as e:
         print(f"Error during extraction/loading: {e}")
         connection.rollback()
-        break
+
+        write_ingestion_log(
+            source_name="dummyjson_products_api",
+            target_table="raw.raw_products",
+            status="FAILED",
+            rows_loaded=len(all_products),
+            started_at=started_at
+        )
+
 
 
 with open(FILE_PATH, "w", encoding="utf-8") as f:
     json.dump(all_products, f, indent=4, ensure_ascii=False)
 
 print(f"Saved all raw products to: {FILE_PATH}")
+
+write_ingestion_log(
+        source_name="dummyjson_products_api",
+        target_table="raw.raw_products",
+        status="SUCCESS",
+        rows_loaded=len(all_products),
+        started_at=started_at
+        )
+
 
 if connection:
     connection.close()

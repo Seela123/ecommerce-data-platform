@@ -4,6 +4,8 @@ import json
 from dotenv import load_dotenv
 import requests
 from datetime import datetime, timezone
+from utils.db_connection import get_db_connect
+from utils.ingestion_logger import write_ingestion_log
 
 load_dotenv()
 
@@ -17,14 +19,11 @@ os.makedirs(STORAGE_DIR, exist_ok=True)
 
 connection = None
 
+started_at = datetime.now(timezone.utc)
+
 try:
-    connection = psycopg2.connect(
-        host=os.getenv("DB_HOST"),
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        port=os.getenv("DB_PORT")
-    )
+    connection = get_db_connect()
+
     print("Successfully connected to database")
 
     cursor = connection.cursor()
@@ -231,6 +230,22 @@ try:
     with open(ITEMS_FILE_PATH, "w", encoding="utf-8") as f:
         json.dump(all_cart_items, f, indent=4, ensure_ascii=False)
 
+    write_ingestion_log(
+        source_name="dummyjson_carts_api",
+        target_table="raw.raw_carts",
+        status="SUCCESS",
+        rows_loaded=len(all_carts),
+        started_at=started_at
+    )
+
+    write_ingestion_log(
+        source_name="dummyjson_carts_api",
+        target_table="raw.raw_cart_items",
+        status="SUCCESS",
+        rows_loaded=len(all_cart_items),
+        started_at=started_at
+    )
+
 
 
     print(f"Saved all raw carts to: {FILE_PATH}")
@@ -241,6 +256,22 @@ try:
 
 except Exception as e:
     print(f"Error: {e}")
+
+    write_ingestion_log(
+        source_name="dummyjson_carts_api",
+        target_table="raw.raw_carts",
+        status="FAILED",
+        rows_loaded=len(all_carts),
+        started_at=started_at
+    )
+
+    write_ingestion_log(
+        source_name="dummyjson_carts_api",
+        target_table="raw.raw_cart_items",
+        status="FAILED",
+        rows_loaded=len(all_cart_items),
+        started_at=started_at
+    )
 
     if connection:
         connection.rollback()

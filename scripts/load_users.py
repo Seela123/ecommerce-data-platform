@@ -1,12 +1,10 @@
 import json
-import os
 from pathlib import Path
 from datetime import datetime, timezone
-
-import psycopg2
 from psycopg2.extras import Json
 from dotenv import load_dotenv
-
+from utils.db_connection import get_db_connect
+from utils.ingestion_logger import write_ingestion_log
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 USERS_FILE_PATH = PROJECT_ROOT / "data" / "raw" / "users.json"
@@ -114,7 +112,7 @@ def create_raw_users_table(connection) -> None:
 def remove_sensitive_fields(user: dict) -> dict:
     clean_user = user.copy()
 
-    # Keep the original JSON structure but do not store passwords in PostgreSQL.
+
     clean_user.pop("password", None)
 
     return clean_user
@@ -156,28 +154,42 @@ def load_users(connection, users: list[dict]) -> None:
     print(f"Inserted/updated {len(users)} users into raw.raw_users")
 
 
-def main():
+def main() -> None:
     connection = None
+    users = []
+    started_at = datetime.now(timezone.utc)
 
     try:
         users = read_users()
 
-        connection = psycopg2.connect(
-            host=os.getenv("DB_HOST"),
-            database=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            port=os.getenv("DB_PORT")
-        )
-
+        connection = get_db_connect()
         print("Successfully connected to database")
 
         create_raw_users_table(connection)
         load_users(connection, users)
 
+        write_ingestion_log(
+            source_name="dummyjson_users_api",
+            target_table="raw.raw_users",
+            status="SUCCESS",
+            rows_loaded=len(users),
+            started_at=started_at
+        )
+
+        print("Users load completed successfully")
+
     except Exception as error:
         if connection:
             connection.rollback()
+
+        write_ingestion_log(
+            source_name="dummyjson_users_api",
+            target_table="raw.raw_users",
+            status="FAILED",
+            rows_loaded=0,
+            started_at=started_at,
+            error_message=str(error)
+        )
 
         print(f"Users load failed: {error}")
         raise
@@ -186,7 +198,6 @@ def main():
         if connection:
             connection.close()
             print("Database connection closed")
-
 
 if __name__ == "__main__":
     main()
