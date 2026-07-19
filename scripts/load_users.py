@@ -7,13 +7,13 @@ from utils.db_connection import get_db_connect
 from utils.ingestion_logger import write_ingestion_log
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-USERS_FILE_PATH = PROJECT_ROOT / "data" / "raw" / "users.json"
+USERS_FILE_PATH = PROJECT_ROOT / "data" / "staging" / "users.json"
 
 load_dotenv(PROJECT_ROOT / ".env")
 
 
 CREATE_TABLE_SQL = """
-CREATE TABLE IF NOT EXISTS raw.raw_users (
+CREATE TABLE IF NOT EXISTS staging.raw_users (
     user_id INT PRIMARY KEY,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS raw.raw_users (
 
 
 UPSERT_USER_SQL = """
-INSERT INTO raw.raw_users (
+INSERT INTO staging.raw_users (
     user_id,
     first_name,
     last_name,
@@ -106,7 +106,7 @@ def create_raw_users_table(connection) -> None:
         cursor.execute(CREATE_TABLE_SQL)
 
     connection.commit()
-    print("Table raw.raw_users created or already exists")
+    print("Table staging.raw_users created or already exists")
 
 
 def remove_sensitive_fields(user: dict) -> dict:
@@ -151,7 +151,7 @@ def load_users(connection, users: list[dict]) -> None:
             )
 
     connection.commit()
-    print(f"Inserted/updated {len(users)} users into raw.raw_users")
+    print(f"Inserted/updated {len(users)} users into staging.raw_users")
 
 
 def main() -> None:
@@ -170,7 +170,7 @@ def main() -> None:
 
         write_ingestion_log(
             source_name="dummyjson_users_api",
-            target_table="raw.raw_users",
+            target_table="staging.raw_users",
             status="SUCCESS",
             rows_loaded=len(users),
             started_at=started_at
@@ -184,7 +184,7 @@ def main() -> None:
 
         write_ingestion_log(
             source_name="dummyjson_users_api",
-            target_table="raw.raw_users",
+            target_table="staging.raw_users",
             status="FAILED",
             rows_loaded=0,
             started_at=started_at,

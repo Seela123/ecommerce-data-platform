@@ -10,7 +10,7 @@ from utils.ingestion_logger import write_ingestion_log
 load_dotenv()
 
 BASE_DIR = r"C:\Users\Selman\Desktop\ecommerce-data-platform"
-STORAGE_DIR = os.path.join(BASE_DIR, "data", "raw")
+STORAGE_DIR = os.path.join(BASE_DIR, "data", "staging")
 FILE_PATH = os.path.join(STORAGE_DIR, "products.json")
 
 os.makedirs(STORAGE_DIR, exist_ok=True)
@@ -24,7 +24,7 @@ try:
     cursor = connection.cursor()
 
     create_table = """
-    CREATE TABLE IF NOT EXISTS raw.raw_products (
+    CREATE TABLE IF NOT EXISTS staging.raw_products (
         product_id INT PRIMARY KEY,
         title VARCHAR(255),
         description TEXT,
@@ -92,7 +92,7 @@ while True:
         cursor = connection.cursor()
 
         insert_query = """
-        INSERT INTO raw.raw_products (
+        INSERT INTO staging.raw_products (
             product_id,
             title,
             description,
@@ -171,7 +171,7 @@ while True:
 
         write_ingestion_log(
             source_name="dummyjson_products_api",
-            target_table="raw.raw_products",
+            target_table="staging.raw_products",
             status="FAILED",
             rows_loaded=len(all_products),
             started_at=started_at
@@ -182,11 +182,11 @@ while True:
 with open(FILE_PATH, "w", encoding="utf-8") as f:
     json.dump(all_products, f, indent=4, ensure_ascii=False)
 
-print(f"Saved all raw products to: {FILE_PATH}")
+print(f"Saved all staging products to: {FILE_PATH}")
 
 write_ingestion_log(
         source_name="dummyjson_products_api",
-        target_table="raw.raw_products",
+        target_table="staging.raw_products",
         status="SUCCESS",
         rows_loaded=len(all_products),
         started_at=started_at

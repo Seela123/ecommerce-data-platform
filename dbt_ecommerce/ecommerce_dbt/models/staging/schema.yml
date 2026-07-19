@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: stg_products
+    description: "to valid data"
+    columns:
+      - name: product_id
+        description: "check for null and unique"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_users
+    description: "valid data"
+    columns:
+      - name: user_id
+        description: "check for null and unique"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - not_null
+
+  - name: stg_carts
+    columns:
+      - name: cart_id
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_users')
+              field: user_id
+
+  - name: stg_cart_items
+    columns:
+      - name: cart_id
+        tests:
+          - relationships:
+              to: ref('stg_carts')
+              field: cart_id
+      - name: product_id
+        tests:
+          - relationships:
+              to: ref('stg_products')
+              field: product_id

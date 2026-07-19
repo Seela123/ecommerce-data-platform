@@ -1,5 +1,4 @@
 import os
-import psycopg2
 import json
 from dotenv import load_dotenv
 import requests
@@ -10,7 +9,7 @@ from utils.ingestion_logger import write_ingestion_log
 load_dotenv()
 
 BASE_DIR = r"C:\Users\Selman\Desktop\ecommerce-data-platform"
-STORAGE_DIR = os.path.join(BASE_DIR, "data", "raw")
+STORAGE_DIR = os.path.join(BASE_DIR, "data", "staging")
 FILE_PATH = os.path.join(STORAGE_DIR, "carts.json")
 ITEMS_FILE_PATH = os.path.join(STORAGE_DIR, "cart_items.json")
 
@@ -28,10 +27,10 @@ try:
 
     cursor = connection.cursor()
 
-    cursor.execute("CREATE SCHEMA IF NOT EXISTS raw;")
+    cursor.execute("CREATE SCHEMA IF NOT EXISTS staging;")
 
     create_table = """
-    CREATE TABLE IF NOT EXISTS raw.raw_carts (
+    CREATE TABLE IF NOT EXISTS staging.raw_carts (
         cart_id INT PRIMARY KEY,
         user_id INT,
         total NUMERIC(12,2),
@@ -44,10 +43,10 @@ try:
     """
 
     cursor.execute(create_table)
-    print("Table raw.raw_carts created or already exists")
+    print("Table staging.raw_carts created or already exists")
 
     create_table_items = """ 
-        CREATE TABLE IF NOT EXISTS raw.raw_cart_items (
+        CREATE TABLE IF NOT EXISTS staging.raw_cart_items (
     cart_id INT NOT NULL,
     line_number INT NOT NULL,
     product_id INT NOT NULL,
@@ -66,7 +65,7 @@ try:
     cursor.execute(create_table_items)
     connection.commit()
 
-    print("Table raw.raw_carts_items created or already exists")
+    print("Table staging.raw_carts_items created or already exists")
 
     url = "https://dummyjson.com/carts"
 
@@ -81,7 +80,7 @@ try:
     all_cart_items = []
 
     insert_query = """
-    INSERT INTO raw.raw_carts (
+    INSERT INTO staging.raw_carts (
         cart_id,
         user_id,
         total,
@@ -103,7 +102,7 @@ try:
     """
 
     insert_item_query = """
-        INSERT INTO raw.raw_cart_items (
+        INSERT INTO staging.raw_cart_items (
             cart_id,
             line_number,
             product_id,
@@ -232,7 +231,7 @@ try:
 
     write_ingestion_log(
         source_name="dummyjson_carts_api",
-        target_table="raw.raw_carts",
+        target_table="staging.raw_carts",
         status="SUCCESS",
         rows_loaded=len(all_carts),
         started_at=started_at
@@ -240,7 +239,7 @@ try:
 
     write_ingestion_log(
         source_name="dummyjson_carts_api",
-        target_table="raw.raw_cart_items",
+        target_table="staging.raw_cart_items",
         status="SUCCESS",
         rows_loaded=len(all_cart_items),
         started_at=started_at
@@ -248,18 +247,18 @@ try:
 
 
 
-    print(f"Saved all raw carts to: {FILE_PATH}")
-    print(f"Inserted/updated {len(all_carts)} carts into raw.raw_carts")
+    print(f"Saved all staging carts to: {FILE_PATH}")
+    print(f"Inserted/updated {len(all_carts)} carts into staging.raw_carts")
 
-    print(f"Saved all raw cart items to: {ITEMS_FILE_PATH}")
-    print(f"Inserted/updated {len(all_cart_items)} carts into raw.raw_cart_items")
+    print(f"Saved all staging cart items to: {ITEMS_FILE_PATH}")
+    print(f"Inserted/updated {len(all_cart_items)} carts into staging.raw_cart_items")
 
 except Exception as e:
     print(f"Error: {e}")
 
     write_ingestion_log(
         source_name="dummyjson_carts_api",
-        target_table="raw.raw_carts",
+        target_table="staging.raw_carts",
         status="FAILED",
         rows_loaded=len(all_carts),
         started_at=started_at
@@ -267,7 +266,7 @@ except Exception as e:
 
     write_ingestion_log(
         source_name="dummyjson_carts_api",
-        target_table="raw.raw_cart_items",
+        target_table="staging.raw_cart_items",
         status="FAILED",
         rows_loaded=len(all_cart_items),
         started_at=started_at

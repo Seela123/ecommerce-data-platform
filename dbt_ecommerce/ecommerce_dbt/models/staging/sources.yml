@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: raw
+    database: ecommerce_dw
+    schema: raw
+    tables:
+      - name: raw_products
+      - name: raw_users
+      - name: raw_carts
+      - name: raw_cart_items
+      - name: raw_api_ingestion_log
+
+
+

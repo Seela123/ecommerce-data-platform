@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from .db_connection import get_db_connect
 
 
+
 def write_ingestion_log(
     source_name,
     target_table,
@@ -16,10 +17,10 @@ def write_ingestion_log(
         connection = get_db_connect()
         cursor = connection.cursor()
 
-        cursor.execute("CREATE SCHEMA IF NOT EXISTS raw;")
+        cursor.execute("CREATE SCHEMA IF NOT EXISTS staging;")
 
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS raw.raw_api_ingestion_log (
+            CREATE TABLE IF NOT EXISTS staging.raw_api_ingestion_log (
                 log_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                 source_name TEXT NOT NULL,
                 target_table TEXT NOT NULL,
@@ -32,7 +33,7 @@ def write_ingestion_log(
         """)
 
         insert_query = """
-            INSERT INTO raw.raw_api_ingestion_log (
+            INSERT INTO staging.raw_api_ingestion_log (
                 source_name,
                 target_table,
                 status,

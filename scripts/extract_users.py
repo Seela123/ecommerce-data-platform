@@ -57,7 +57,7 @@ def save_users(users: list[dict], output_path: Path) -> None:
 
 def main():
     project_root = Path(__file__).resolve().parents[1]
-    output_path = project_root / "data" / "raw" / "users.json"
+    output_path = project_root / "data" / "staging" / "users.json"
 
     try:
         print("Starting users extraction...")
