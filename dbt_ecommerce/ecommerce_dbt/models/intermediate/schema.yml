@@ -1,0 +1,52 @@
+version 2:
+
+models:
+  - name: int_cart_items_enriched
+    description: "valid data"
+    columns:
+      - name: cart_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_carts')
+              field : cart_id
+
+      - name: line_number
+        tests:
+          - not_null
+
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+
+      - name: user_id
+        tests:
+          - relationships:
+              to: ref('stg_users')
+              field : user_id
+
+  - name: int_product_sales_summary
+    description: "valid data"
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+
+
+  - name: int_user_cart_summary
+    description: "valid data"
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg_users')
+              field: user_id
