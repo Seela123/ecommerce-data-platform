@@ -1,0 +1,58 @@
+version 2:
+
+models:
+  - name: fct_sales
+    columns:
+      - name: cart_id
+        tests:
+          - not_null
+      - name: line_number
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+
+  - name: dim_products
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_users
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - unique
+      - name: email
+        tests:
+          - not_null
+
+  - name: mart_product_performance
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          - unique
+
+  - name: mart_customer_performance
+    columns:
+      - name : user_id
+        tests:
+          - not_null
+          - unique
+
+  - name: mart_inventory_risk
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          - unique
+      - name: inventory_risk_level
+        tests:
+          - not_null
