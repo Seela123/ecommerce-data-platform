@@ -21,7 +21,7 @@ ecommerce_dbt:
       host: host.docker.internal
       port: 5433
       user: postgres
-      password: Abetare_1
+      password: YOUR_PASSWORD # YOU NEED TO USE YOUR PERSONAL PASSWORD FOR THIS FILE 
       dbname: ecommerce_dw
       schema: staging
       threads: 4
