@@ -1,0 +1,8 @@
+api-server:
+    port: "8081"
+postgres:
+    port: "5436"
+project:
+    name: dags
+webserver:
+    port: "8081"

@@ -1,0 +1,27 @@
+# NOTE:
+# When running dbt inside the Astro container from:
+# /usr/local/airflow/dbt_ecommerce/ecommerce_dbt
+#
+# use:
+# dbt debug --profiles-dir ..
+# dbt run --profiles-dir ..
+# dbt test --profiles-dir ..
+# Because dbt normally searches for profiles.yml inside the current project folder,
+# we must tell dbt to use the parent folder with:
+# to run or test or debug one dbt run dbt test --select <file> --profiles-dir ..
+
+
+
+ecommerce_dbt:
+  target: dev
+
+  outputs:
+    dev:
+      type: postgres
+      host: host.docker.internal
+      port: 5433
+      user: postgres
+      password: Abetare_1
+      dbname: ecommerce_dw
+      schema: staging
+      threads: 4

@@ -1,23 +1,19 @@
 import os
 import psycopg2
-from dotenv import load_dotenv
-
-load_dotenv()
-
 
 def get_db_connect():
-    try:
-        connection = psycopg2.connect(
-            host=os.getenv("DB_HOST"),
-            database=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            port=os.getenv("DB_PORT")
-        )
+    if os.getenv("AIRFLOW_HOME"):
+        host = "host.docker.internal"
+        port = "5433"
+    else:
+        # 2. Fallback to your local machine values if running standalone
+        host = os.getenv("DB_HOST", "localhost")
+        port = os.getenv("DB_PORT", "5433")
 
-        print("Successfully connected to database")
-        return connection
-
-    except Exception as e:
-        print(f"Connection error: {e}")
-        raise
+    return psycopg2.connect(
+        host=host,
+        port=port,
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD")
+    )

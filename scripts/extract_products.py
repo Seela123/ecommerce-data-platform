@@ -5,15 +5,17 @@ from dotenv import load_dotenv
 import requests
 from utils.db_connection import get_db_connect
 from utils.ingestion_logger import write_ingestion_log
-
+import json
+from pathlib import Path
 
 load_dotenv()
 
-BASE_DIR = r"C:\Users\Selman\Desktop\ecommerce-data-platform"
-STORAGE_DIR = os.path.join(BASE_DIR, "data", "staging")
-FILE_PATH = os.path.join(STORAGE_DIR, "products.json")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-os.makedirs(STORAGE_DIR, exist_ok=True)
+STORAGE_DIR = PROJECT_ROOT / "data" / "raw"
+FILE_PATH = STORAGE_DIR / "products.json"
+
+STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 
 connection = None
 started_at = datetime.now(timezone.utc)
@@ -24,7 +26,7 @@ try:
     cursor = connection.cursor()
 
     create_table = """
-    CREATE TABLE IF NOT EXISTS staging.raw_products (
+    CREATE TABLE IF NOT EXISTS raw.raw_products (
         product_id INT PRIMARY KEY,
         title VARCHAR(255),
         description TEXT,
@@ -45,7 +47,7 @@ try:
     connection.commit()
     cursor.close()
 
-    print("Table raw_products is ready!")
+    print("Table raw.raw_products is ready!")
 
 except Exception as e:
     print(f"Failed to create table: {e}")
@@ -92,7 +94,7 @@ while True:
         cursor = connection.cursor()
 
         insert_query = """
-        INSERT INTO staging.raw_products (
+        INSERT INTO raw.raw_products (
             product_id,
             title,
             description,
@@ -155,7 +157,7 @@ while True:
         connection.commit()
         cursor.close()
 
-        print(f"Inserted {len(products)} products into raw_products")
+        print(f"Inserted {len(products)} products into raw.raw_products")
 
         skip += limit
 
@@ -179,10 +181,10 @@ while True:
 
 
 
-with open(FILE_PATH, "w", encoding="utf-8") as f:
-    json.dump(all_products, f, indent=4, ensure_ascii=False)
+with FILE_PATH.open("w", encoding="utf-8") as file:
+    json.dump(all_products, file, indent=4, ensure_ascii=False)
 
-print(f"Saved all staging products to: {FILE_PATH}")
+print(f"Saved products to: {FILE_PATH}")
 
 write_ingestion_log(
         source_name="dummyjson_products_api",

@@ -1,0 +1,72 @@
+[0m18:57:25.255172 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73ee7c9a9130>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73ee7ba3bb60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73ee7d06cf80>]}
+
+
+============================== 18:57:25.269472 | e3bfd4e5-f71f-4391-ad92-88dc90ddf951 ==============================
+[0m18:57:25.269472 [info ] [MainThread]: Running with dbt=1.12.0
+[0m18:57:25.272384 [debug] [MainThread]: running dbt with arguments {'use_experimental_parser': 'False', 'log_path': 'logs', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True', 'use_colors': 'True', 'printer_width': '80', 'warn_error': 'None', 'empty': 'None', 'introspect': 'True', 'target_path': 'None', 'log_cache_events': 'False', 'quiet': 'False', 'debug': 'False', 'cache_selected_only': 'False', 'write_json': 'True', 'partial_parse': 'True', 'version_check': 'True', 'log_format': 'default', 'hints_enabled': 'True', 'profiles_dir': '/home/selman/.dbt', 'no_print': 'None', 'fail_fast': 'False', 'indirect_selection': 'eager', 'invocation_command': 'dbt test', 'maximum_seed_size_mib': '1', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])'}
+[0m18:57:25.274852 [error] [MainThread]: [[31mERROR[0m]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /mnt/c/Users/Selman/Desktop/ecommerce-data-platform/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m18:57:25.280643 [debug] [MainThread]: Resource report: {"command_name": "test", "command_success": false, "command_wall_clock_time": 0.23603949, "process_in_blocks": "58816", "process_kernel_time": 2.039291, "process_mem_max_rss": "112484", "process_out_blocks": "0", "process_user_time": 2.698308}
+[0m18:57:25.283167 [debug] [MainThread]: Command `dbt test` failed at 18:57:25.282702 after 0.24 seconds
+[0m18:57:25.285278 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73ee7c5f3e00>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73ee7c9a9130>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73ee7da2ec30>]}
+[0m18:57:25.286977 [debug] [MainThread]: Flushing usage events
+[0m18:57:26.500845 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m18:57:36.371447 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73a0b839d520>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73a0b94c3bc0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73a0b6f155e0>]}
+
+
+============================== 18:57:36.376579 | c8cc5bef-5418-4e46-bf0a-530572aaf95f ==============================
+[0m18:57:36.376579 [info ] [MainThread]: Running with dbt=1.12.0
+[0m18:57:36.379583 [debug] [MainThread]: running dbt with arguments {'no_print': 'None', 'quiet': 'False', 'send_anonymous_usage_stats': 'True', 'use_experimental_parser': 'False', 'introspect': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'version_check': 'True', 'log_format': 'default', 'indirect_selection': 'eager', 'static_parser': 'True', 'hints_enabled': 'True', 'use_colors': 'True', 'profiles_dir': '/home/selman/.dbt', 'warn_error': 'None', 'printer_width': '80', 'log_path': 'logs', 'empty': 'None', 'debug': 'False', 'target_path': 'None', 'partial_parse': 'True', 'write_json': 'True', 'maximum_seed_size_mib': '1', 'cache_selected_only': 'False', 'log_cache_events': 'False', 'invocation_command': 'dbt debug', 'fail_fast': 'False'}
+[0m18:57:36.412735 [info ] [MainThread]: dbt version: 1.12.0
+[0m18:57:36.415285 [info ] [MainThread]: python version: 3.12.3
+[0m18:57:36.417346 [info ] [MainThread]: python path: /home/selman/.venvs/ecommerce-airflow/bin/python
+[0m18:57:36.419387 [info ] [MainThread]: os info: Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39
+[0m18:57:36.537556 [info ] [MainThread]: Error importing adapter: No module named 'dbt.adapters.databricks'
+[0m18:57:36.543708 [info ] [MainThread]: Using profiles dir at /home/selman/.dbt
+[0m18:57:36.545855 [info ] [MainThread]: Using profiles.yml file at /home/selman/.dbt/profiles.yml
+[0m18:57:36.548067 [info ] [MainThread]: Using dbt_project.yml file at /mnt/c/Users/Selman/Desktop/ecommerce-data-platform/dbt_project.yml
+[0m18:57:36.552548 [info ] [MainThread]: Configuration:
+[0m18:57:36.555045 [info ] [MainThread]:   profiles.yml file [[31mERROR invalid[0m]
+[0m18:57:36.558541 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m18:57:36.560742 [info ] [MainThread]: Required dependencies:
+[0m18:57:36.562956 [debug] [MainThread]: Executing "git --help"
+[0m18:57:36.584315 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--config-env=<name>=<envvar>] <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m18:57:36.587669 [debug] [MainThread]: STDERR: "b''"
+[0m18:57:36.589876 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m18:57:36.592311 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m18:57:36.595836 [info ] [MainThread]: [31m2 checks failed:[0m
+[0m18:57:36.598231 [info ] [MainThread]: Could not load dbt_project.yml
+Profile loading failed for the following reason:
+Runtime Error
+  Credentials in profile "nyc_data", target "dev" invalid: Runtime Error
+    Could not find adapter type databricks!
+
+
+[0m18:57:36.601383 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </mnt/c/Users/Selman/Desktop/ecommerce-data-platform/dbt_project.yml> not found
+
+[0m18:57:36.606120 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.36939898, "process_in_blocks": "512", "process_kernel_time": 0.195258, "process_mem_max_rss": "117288", "process_out_blocks": "0", "process_user_time": 2.056189}
+[0m18:57:36.608421 [debug] [MainThread]: Command `dbt debug` failed at 18:57:36.608215 after 0.37 seconds
+[0m18:57:36.610144 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73a0b8673740>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73a0b7b8c320>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73a0b6eca780>]}
+[0m18:57:36.612496 [debug] [MainThread]: Flushing usage events
+[0m18:57:37.324394 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m19:04:04.091631 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x75bb5dc2cc20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x75bb5db745c0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x75bb5df009b0>]}
+
+
+============================== 19:04:04.098648 | 2c159fbe-e541-4d76-b2fb-e072164d2737 ==============================
+[0m19:04:04.098648 [info ] [MainThread]: Running with dbt=1.12.0
+[0m19:04:04.101920 [debug] [MainThread]: running dbt with arguments {'introspect': 'True', 'write_json': 'True', 'debug': 'False', 'static_parser': 'True', 'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'partial_parse': 'True', 'log_format': 'default', 'empty': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'fail_fast': 'False', 'use_experimental_parser': 'False', 'maximum_seed_size_mib': '1', 'invocation_command': 'dbt test', 'use_colors': 'True', 'log_path': 'logs', 'version_check': 'True', 'hints_enabled': 'True', 'cache_selected_only': 'False', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': '/home/selman/.dbt', 'send_anonymous_usage_stats': 'True', 'no_print': 'None', 'target_path': 'None'}
+[0m19:04:04.105423 [error] [MainThread]: [[31mERROR[0m]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /mnt/c/Users/Selman/desktop/ecommerce-data-platform/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m19:04:04.108790 [debug] [MainThread]: Resource report: {"command_name": "test", "command_success": false, "command_wall_clock_time": 0.13412982, "process_in_blocks": "0", "process_kernel_time": 0.194473, "process_mem_max_rss": "112504", "process_out_blocks": "0", "process_user_time": 1.956179}
+[0m19:04:04.111450 [debug] [MainThread]: Command `dbt test` failed at 19:04:04.111189 after 0.14 seconds
+[0m19:04:04.113701 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x75bb5cfa9b50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x75bb5e4251f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x75bb604fac60>]}
+[0m19:04:04.116096 [debug] [MainThread]: Flushing usage events
+[0m19:04:04.874862 [debug] [MainThread]: An error was encountered while trying to flush usage events

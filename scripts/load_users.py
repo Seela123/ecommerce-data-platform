@@ -7,7 +7,7 @@ from utils.db_connection import get_db_connect
 from utils.ingestion_logger import write_ingestion_log
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-USERS_FILE_PATH = PROJECT_ROOT / "data" / "staging" / "users.json"
+USERS_FILE_PATH = PROJECT_ROOT / "data" / "raw" / "users.json"
 
 load_dotenv(PROJECT_ROOT / ".env")
 
@@ -106,7 +106,7 @@ def create_raw_users_table(connection) -> None:
         cursor.execute(CREATE_TABLE_SQL)
 
     connection.commit()
-    print("Table staging.raw_users created or already exists")
+    print("Table raw.raw_users created or already exists")
 
 
 def remove_sensitive_fields(user: dict) -> dict:
@@ -151,7 +151,7 @@ def load_users(connection, users: list[dict]) -> None:
             )
 
     connection.commit()
-    print(f"Inserted/updated {len(users)} users into staging.raw_users")
+    print(f"Inserted/updated {len(users)} users into raw.raw_users")
 
 
 def main() -> None:

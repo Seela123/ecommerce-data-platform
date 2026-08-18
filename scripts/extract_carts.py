@@ -9,7 +9,7 @@ from utils.ingestion_logger import write_ingestion_log
 load_dotenv()
 
 BASE_DIR = r"C:\Users\Selman\Desktop\ecommerce-data-platform"
-STORAGE_DIR = os.path.join(BASE_DIR, "data", "staging")
+STORAGE_DIR = os.path.join(BASE_DIR, "data", "raw")
 FILE_PATH = os.path.join(STORAGE_DIR, "carts.json")
 ITEMS_FILE_PATH = os.path.join(STORAGE_DIR, "cart_items.json")
 
@@ -27,10 +27,10 @@ try:
 
     cursor = connection.cursor()
 
-    cursor.execute("CREATE SCHEMA IF NOT EXISTS staging;")
+    cursor.execute("CREATE SCHEMA IF NOT EXISTS raw;")
 
     create_table = """
-    CREATE TABLE IF NOT EXISTS staging.raw_carts (
+    CREATE TABLE IF NOT EXISTS raw.raw_carts (
         cart_id INT PRIMARY KEY,
         user_id INT,
         total NUMERIC(12,2),
@@ -43,10 +43,10 @@ try:
     """
 
     cursor.execute(create_table)
-    print("Table staging.raw_carts created or already exists")
+    print("Table raw.raw_carts created or already exists")
 
     create_table_items = """ 
-        CREATE TABLE IF NOT EXISTS staging.raw_cart_items (
+        CREATE TABLE IF NOT EXISTS raw.raw_cart_items (
     cart_id INT NOT NULL,
     line_number INT NOT NULL,
     product_id INT NOT NULL,
@@ -65,7 +65,7 @@ try:
     cursor.execute(create_table_items)
     connection.commit()
 
-    print("Table staging.raw_carts_items created or already exists")
+    print("Table raw.raw_carts_items created or already exists")
 
     url = "https://dummyjson.com/carts"
 
@@ -80,7 +80,7 @@ try:
     all_cart_items = []
 
     insert_query = """
-    INSERT INTO staging.raw_carts (
+    INSERT INTO raw.raw_carts (
         cart_id,
         user_id,
         total,
@@ -102,7 +102,7 @@ try:
     """
 
     insert_item_query = """
-        INSERT INTO staging.raw_cart_items (
+        INSERT INTO raw.raw_cart_items (
             cart_id,
             line_number,
             product_id,
@@ -247,11 +247,11 @@ try:
 
 
 
-    print(f"Saved all staging carts to: {FILE_PATH}")
-    print(f"Inserted/updated {len(all_carts)} carts into staging.raw_carts")
+    print(f"Saved all raw carts to: {FILE_PATH}")
+    print(f"Inserted/updated {len(all_carts)} carts into raw.raw_carts")
 
-    print(f"Saved all staging cart items to: {ITEMS_FILE_PATH}")
-    print(f"Inserted/updated {len(all_cart_items)} carts into staging.raw_cart_items")
+    print(f"Saved all raw cart items to: {ITEMS_FILE_PATH}")
+    print(f"Inserted/updated {len(all_cart_items)} carts into raw.raw_cart_items")
 
 except Exception as e:
     print(f"Error: {e}")
