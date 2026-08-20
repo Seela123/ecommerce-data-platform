@@ -23,29 +23,10 @@ The goal of this project is to build a complete data pipeline that helps answer 
 
 ## Architecture
 
-```text
-DummyJSON API
-    |
-    | Python extraction and loading scripts
-    v
-PostgreSQL - Raw Layer
-    |
-    | dbt staging models
-    v
-PostgreSQL - Staging Layer
-    |
-    | dbt intermediate models
-    v
-PostgreSQL - Intermediate Layer
-    |
-    | dbt marts models
-    v
-PostgreSQL - Marts Layer
-    |
-    | Airflow orchestration
-    v
-Power BI Desktop
+![Architecture](architecture%20final.png)
+
 ```
+
 
 ---
 
@@ -59,7 +40,6 @@ Power BI Desktop
 | Apache Airflow     | Pipeline orchestration                          |
 | Astro CLI          | Running Airflow with Docker                     |
 | Docker             | Containerized Airflow environment               |
-| Power BI Desktop   | Data visualization and reporting                |
 | Git / GitHub       | Version control and project sharing             |
 
 ---
